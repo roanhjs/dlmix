@@ -1,5 +1,4 @@
 import { spawn } from "child_process";
-import fs from "fs";
 import path from "path";
 
 export async function m3u8ToMp4({ m3u8Url }) {

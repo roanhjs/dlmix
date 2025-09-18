@@ -1,15 +1,28 @@
 import e from "express";
 import cors from "cors";
+import pdfkit from "pdfkit";
+import fs from "fs";
 import { dlPin } from "./modules/pin/index.js";
 import { m3u8ToMp4 } from "./utils/m3u8ToMp4.js";
-import fs from "fs";
+import { dlMangaIn } from "./modules/mangasin/index.js";
+import { webpToJpg } from "./utils/webpToJpg.js";
 
 const PORT = process.env.PORT || 3000;
 
 const app = e();
 app.use(cors());
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.json({
+    message: {
+      en: "Welcome to the DLMix API! Developed by @roanhjs.",
+      es: "Bienvenido a la API de DLMix. Desarrollada por @roanhjs.",
+    },
+    timestamp: Date.now(),
+  });
+});
+
+app.get("/pin", async (req, res) => {
   const { url } = req.query;
   if (!url) return res.status(400).send("Missing URL");
   console.log("Received URL:", url);
@@ -25,6 +38,43 @@ app.get("/", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "hubo un problema al procesar el video." });
+  }
+});
+
+app.get("/mangasin", async (req, res) => {
+  const { url } = req.query;
+  if (!url) return res.status(400).send("Missing URL");
+  console.log("Received URL:", url);
+
+  try {
+    const { title, imgs } = await dlMangaIn({ url });
+
+    res.set("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=${title}.pdf`);
+
+    const pdf = new pdfkit();
+    pdf.pipe(res);
+
+    for (const img of imgs) {
+      const res = await fetch(img);
+      const arrayBuffer = await res.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const jpg = await webpToJpg({ buffer });
+
+      pdf.image(jpg, {
+        fit: [500, 800],
+        align: "center",
+        valign: "center",
+        margins: 0,
+      });
+
+      pdf.addPage();
+    }
+
+    pdf.end();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "hubo un problema al procesar el manga." });
   }
 });
 
