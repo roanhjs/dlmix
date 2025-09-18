@@ -3,7 +3,16 @@ import { chromium } from "playwright";
 export async function dlMangaIn({ url }) {
   try {
     const browser = await chromium.launch({ headless: true, slowMo: 1000 });
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:129.0) Gecko/20100101 Firefox/129.0",
+      extraHTTPHeaders: {
+        "Accept-Language": "es-ES,es;q=0.9",
+        Referer: "https://google.com/",
+      },
+      geolocation: { latitude: -34.6037, longitude: -58.3816 }, // Buenos Aires
+      permissions: ["geolocation"],
+    });
     const page = await context.newPage();
     const timeout = 180000;
 
