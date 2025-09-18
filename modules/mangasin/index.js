@@ -4,6 +4,7 @@ export async function dlMangaIn({ url }) {
   try {
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
+    const timeout = 120000;
 
     await page.route("**/*", (route) => {
       const url = route.request().url();
@@ -28,15 +29,15 @@ export async function dlMangaIn({ url }) {
     });
 
     await page.goto(url, {
-      waitUntil: "load",
-      timeout: 60000,
+      waitUntil: "networkidle",
+      timeout,
     });
 
-    await page.waitForSelector("a#modeALL", { timeout: 60000 });
-    const modeAll = page.locator("a#modeALL");
+    await page.waitForSelector("a#modeALL", { timeout });
+    const modeAll = await page.$("a#modeALL");
     await modeAll.click();
 
-    await page.waitForSelector("div#all");
+    await page.waitForSelector("div#all", { timeout });
     const allDiv = await page.$("div#all");
 
     const imgHandles = await allDiv.$$("img");
@@ -55,5 +56,6 @@ export async function dlMangaIn({ url }) {
     };
   } catch (err) {
     console.error(err);
+    return { title: "", imgs: [] };
   }
 }
