@@ -3,42 +3,20 @@ import { chromium } from "playwright";
 export async function dlMangaIn({ url }) {
   try {
     const browser = await chromium.launch({ headless: true, slowMo: 1000 });
-    const page = await browser.newPage();
-    const timeout = 120000;
-
-    // await page.route("**/*", (route) => {
-    //   const url = route.request().url();
-    //   const bloqueables = [
-    //     "ads",
-    //     "doubleclick",
-    //     "googlesyndication",
-    //     "tracking",
-    //     "analytics",
-    //   ];
-
-    //   const dominiosPermitidos = ["m440.in"];
-
-    //   if (
-    //     bloqueables.some((p) => url.includes(p)) &&
-    //     !dominiosPermitidos.some((dominio) => url.includes(dominio))
-    //   ) {
-    //     return route.abort();
-    //   }
-
-    //   route.continue();
-    // });
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    const timeout = 180000;
 
     await page.goto(url, {
       waitUntil: "load",
       timeout,
     });
 
-    await page.waitForSelector("a#modeALL", { timeout });
     const modeAll = page.locator("a#modeALL");
     await modeAll.waitFor({ state: "visible", timeout });
     await modeAll.click();
 
-    await page.waitForSelector("div#all", { timeout });
+    await page.waitForSelector("div#all", { state: "visible", timeout });
     const allDiv = await page.$("div#all");
 
     const imgHandles = await allDiv.$$("img");
