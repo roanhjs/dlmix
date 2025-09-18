@@ -20,9 +20,9 @@ export async function dlMangaIn({ url }) {
 
       const dominiosPermitidos = ["m440.in"];
 
-      // Detecta challenge de Cloudflare
+      // Bloquea cualquier challenge de Cloudflare
       if (url.includes("/cdn-cgi/challenge-platform/")) {
-        console.log("Bloqueando Cloudflare challenge:", url);
+        console.log("🛑 Bloqueando Cloudflare challenge:", url);
         return route.abort();
       }
 
@@ -34,7 +34,6 @@ export async function dlMangaIn({ url }) {
         return route.abort();
       }
 
-      // Permite todo lo demás
       route.continue();
     });
 
