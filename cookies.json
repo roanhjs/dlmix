@@ -1,0 +1,101 @@
+{
+  "cookies": [
+    {
+      "name": "laravel_session",
+      "value": "eyJpdiI6IjA2VThTeW9WMndJeUFqTjZPeDFqREE9PSIsInZhbHVlIjoiNU1JY0hFNnFmMEhcL3UwdHBvVFdubTZtRW51ajMydXBSMlIxcldcL0lEYjdjbTFNTlczZStpTWR0RXZqQ1c2ZzRjRW0ra1VDK0NqaTV3V3FIRDVOWG4zdz09IiwibWFjIjoiODk5NTQ1YTk3NDU0OTdlOGI5NTZhNDk4MzFjZGYxYzIxOGU4MWM2NDliNjcwZTQ1NmQ2Yzg2YmEwNDMxNWYzMyJ9",
+      "domain": "m440.in",
+      "path": "/",
+      "expires": 1758246301.805758,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.2.986295338.1758239023",
+      "domain": ".m440.in",
+      "path": "/",
+      "expires": 1792799102.128835,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gid",
+      "value": "GA1.2.1971264716.1758239023",
+      "domain": ".m440.in",
+      "path": "/",
+      "expires": 1758325502,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "cf_clearance",
+      "value": "pPjIX8vVKge0th0UG3uFHlq3vASXdwgObGDKDwkUdPk-1758239023-1.2.1.1-1QSg65FzqFkHh25p8ZaKYctX8vGUNazf7bgCvIISw51KUelc9KRbKxdLw5Y1rmhJvRLtoWNuNm.fCguKPFarzcEqA.TjJm_qSh_POM5RUmbnEbK5q8wpW9GupXm_nH8IIRmE2N35BHWxiU_qsR3o7UItsLVDuF4Vw_YoCXmljlRkbK6fIBcc1ZRYHM8vF8c_wRwFZoBqhY98fHeLfUSDUK2KPMOCXfCXeoJ0AohdNQc",
+      "domain": ".m440.in",
+      "path": "/",
+      "expires": 1789775023.651578,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None",
+      "partitionKey": "https://m440.in",
+      "_crHasCrossSiteAncestor": false
+    },
+    {
+      "name": "OAID",
+      "value": "008248daa7f64d3df5f88316a75a431e",
+      "domain": "madurird.com",
+      "path": "/",
+      "expires": 1789775024.564612,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "oaidts",
+      "value": "1758239024",
+      "domain": "madurird.com",
+      "path": "/",
+      "expires": 1789775024.564681,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_gat",
+      "value": "1",
+      "domain": ".m440.in",
+      "path": "/",
+      "expires": 1758239156,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_SHMF45BMPQ",
+      "value": "GS2.2.s1758239024$o1$g1$t1758239102$j55$l0$h0",
+      "domain": ".m440.in",
+      "path": "/",
+      "expires": 1792799102.687094,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://m440.in",
+      "localStorage": [
+        {
+          "name": "readermode",
+          "value": "Paginada"
+        },
+        {
+          "name": "UltimosMangasLeidos",
+          "value": "[{\"manga_id\":\"2\",\"manga_name\":\"Naruto\",\"manga_slug\":\"naruto\",\"manga_autor\":\"Kishimoto Masashi\",\"manga_artist\":\"Kishimoto Masashi\",\"manga_type_id\":\"1\",\"manga_caution\":\"0\",\"chapter_id\":\"129819\",\"chapter_name\":\"&iexcl;&iexcl;Uzumaki Naruto!!\",\"chapter_number\":\"700\",\"chapter_slug\":\"700-7w2lj\",\"chapter_page\":1,\"chapter_visited\":1758239102066}]"
+        }
+      ]
+    }
+  ]
+}

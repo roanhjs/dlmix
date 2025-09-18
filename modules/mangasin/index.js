@@ -1,48 +1,36 @@
 import { chromium } from "playwright";
+import fs from "fs";
+
+const COOKIES_FILE = "cookies.json";
 
 export async function dlMangaIn({ url }) {
   try {
-    const browser = await chromium.launch({ headless: true, slowMo: 1000 });
-    const context = await browser.newContext();
+    const browser = await chromium.launch({
+      headless: true,
+      slowMo: 100,
+    });
+
+    const storageState = fs.existsSync(COOKIES_FILE) ? COOKIES_FILE : undefined;
+
+    const context = await browser.newContext({
+      storageState,
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+      viewport: { width: 1280, height: 720 },
+      locale: "en-US",
+    });
+
     const page = await context.newPage();
     const timeout = 180000;
 
-    await page.route("**/*", (route) => {
-      const url = route.request().url();
+    await page.goto(url, { waitUntil: "load", timeout });
 
-      const bloqueables = [
-        "ads",
-        "doubleclick",
-        "googlesyndication",
-        "tracking",
-        "analytics",
-      ];
+    await page.waitForSelector("body", { timeout });
 
-      const dominiosPermitidos = ["m440.in"];
+    const storage = await context.storageState();
+    fs.writeFileSync(COOKIES_FILE, JSON.stringify(storage, null, 2));
+    console.log("Cookies guardadas en", COOKIES_FILE);
 
-      // Bloquea cualquier challenge de Cloudflare
-      if (url.includes("/cdn-cgi/challenge-platform/")) {
-        console.log("🛑 Bloqueando Cloudflare challenge:", url);
-        return route.abort();
-      }
-
-      // Bloquea ads y tracking
-      if (
-        bloqueables.some((p) => url.includes(p)) &&
-        !dominiosPermitidos.some((dominio) => url.includes(dominio))
-      ) {
-        return route.abort();
-      }
-
-      route.continue();
-    });
-
-    await page.goto(url, {
-      waitUntil: "load",
-      timeout,
-    });
-    const content = await page.content();
-    console.log(content);
     const title = await page.title();
 
     const modeAll = page.locator("a#modeALL");
@@ -53,20 +41,17 @@ export async function dlMangaIn({ url }) {
     const allDiv = await page.$("div#all");
 
     const imgHandles = await allDiv.$$("img");
-    let imgs = [];
+    const imgs = [];
     for (const img of imgHandles) {
       const src =
         (await img.getAttribute("data-src")) || (await img.getAttribute("src"));
-      imgs.push(src);
+      if (src) imgs.push(src);
     }
 
     await browser.close();
-    return {
-      title,
-      imgs,
-    };
+    return { title, imgs };
   } catch (err) {
-    console.error(err);
+    console.error("❌ Error en dlMangaIn:", err);
     return { title: "", imgs: [] };
   }
 }
