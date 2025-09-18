@@ -28,11 +28,12 @@ export async function dlMangaIn({ url }) {
     });
 
     await page.goto(url, {
-      waitUntil: "domcontentloaded",
+      waitUntil: "load",
+      timeout: 60000,
     });
 
-    await page.waitForSelector("a#modeALL");
-    const modeAll = await page.$("a#modeALL");
+    await page.waitForSelector("a#modeALL", { timeout: 60000 });
+    const modeAll = page.locator("a#modeALL");
     await modeAll.click();
 
     await page.waitForSelector("div#all");
