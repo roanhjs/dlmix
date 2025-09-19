@@ -85,7 +85,7 @@ app.get("/mangadex", async (req, res) => {
   console.log("Received URL:", url);
 
   try {
-    await dlMangaDex({ url });
+    await dlMangadex({ url });
 
     // res.set("Content-Type", "application/pdf");
     // res.setHeader("Content-Disposition", `attachment; filename=${title}.pdf`);
