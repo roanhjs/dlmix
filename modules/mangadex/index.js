@@ -1,39 +1,32 @@
 import { chromium } from "playwright";
 
 export async function dlMangadex({ url }) {
-  try {
-    const timeout = 60000;
-    const browser = await chromium.launch({ headless: true });
-    const ctx = await browser.newContext();
-    const page = await ctx.newPage();
-    await page.goto(url, { timeout, waitUntil: "load" });
+  const browser = await chromium.launch({ headless: true });
+  const ctx = await browser.newContext();
+  const page = await ctx.newPage();
+  const timeout = 60000;
 
-    // const menu = page.locator(".reader--meta.menu");
-    // await menu.waitFor({ state: "visible", timeout });
-    // await menu.click();
+  const images = [];
 
-    // const btn = page.locator("button:has-text('Single Page')");
-    // await btn.waitFor({ state: "visible", timeout });
-    // btn.click().then(async () => {
-    //   const btn = page.locator("button:has-text('Double Page')");
-    //   await btn.waitFor({ state: "visible", timeout });
-    //   await btn.click();
-    // });
+  page.on("response", async (res) => {
+    const url = res.url();
+    if (url.includes("cmdxd98sb0x3yprd") && url.endsWith(".png")) {
+      try {
+        const buf = await fetch(url).then((res) => res.arrayBuffer());
+        const match = url.split("/");
+        const match2 = match[5].split("-");
+        images.push({ url, buffer: buf, id: match2[0] });
+      } catch (e) {
+        console.error("error leyendo", url, e);
+      }
+    }
+  });
 
-    await page
-      .waitForResponse(
-        (res) => {
-          const url = res.url();
-          if (url.includes("cmdxd98sb0x3yprd") && url.endsWith(".png")) {
-            console.log(url);
-          }
-        },
-        { timeout },
-      )
-      .finally(async () => {
-        await browser.close();
-      });
-  } catch (err) {
-    console.error(err);
-  }
+  await page.goto(url, { timeout, waitUntil: "load" });
+
+  await page.waitForTimeout(timeout);
+
+  await browser.close();
+  const parsedImages = images.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+  return parsedImages;
 }

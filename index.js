@@ -85,31 +85,27 @@ app.get("/mangadex", async (req, res) => {
   console.log("Received URL:", url);
 
   try {
-    await dlMangadex({ url });
+    const buffers = await dlMangadex({ url });
 
-    // res.set("Content-Type", "application/pdf");
-    // res.setHeader("Content-Disposition", `attachment; filename=${title}.pdf`);
+    res.set("Content-Type", "application/pdf");
 
-    // const pdf = new pdfkit();
-    // pdf.pipe(res);
+    const pdf = new pdfkit();
+    pdf.pipe(res);
 
-    // for (const img of imgs) {
-    //   const res = await fetch(img);
-    //   const arrayBuffer = await res.arrayBuffer();
-    //   const buffer = Buffer.from(arrayBuffer);
-    //   const jpg = await webpToJpg({ buffer });
+    for (const buffer of buffers) {
+      const jpg = await webpToJpg({ buffer: Buffer.from(buffer.buffer) });
 
-    //   pdf.image(jpg, {
-    //     fit: [500, 800],
-    //     align: "center",
-    //     valign: "center",
-    //     margins: 0,
-    //   });
+      pdf.image(jpg, {
+        fit: [500, 800],
+        align: "center",
+        valign: "center",
+        margins: 0,
+      });
 
-    //   pdf.addPage();
-    // }
+      pdf.addPage();
+    }
 
-    // pdf.end();
+    pdf.end();
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "hubo un problema al procesar el manga." });
