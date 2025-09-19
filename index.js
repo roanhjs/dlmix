@@ -85,24 +85,34 @@ app.get("/mangadex", async (req, res) => {
   console.log("Received URL:", url);
 
   try {
-    const buffers = await dlMangadex({ url });
+    const images = await dlMangadex({ url });
 
     res.set("Content-Type", "application/pdf");
 
     const pdf = new pdfkit();
     pdf.pipe(res);
 
-    for (const buffer of buffers) {
-      const jpg = await webpToJpg({ buffer: Buffer.from(buffer.buffer) });
+    for (const img of images) {
+      try {
+        const res = await fetch(img.url);
+        const arrayBuffer = await res.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const jpg = await webpToJpg({ buffer });
 
-      pdf.image(jpg, {
-        fit: [500, 800],
-        align: "center",
-        valign: "center",
-        margins: 0,
-      });
+        pdf.image(jpg, {
+          fit: [500, 800],
+          align: "center",
+          valign: "center",
+          margins: 0,
+        });
 
-      pdf.addPage();
+        pdf.addPage();
+      } catch (error) {
+        console.error(error);
+        res
+          .status(500)
+          .send({ message: "hubo un problema al procesar el manga." });
+      }
     }
 
     pdf.end();
