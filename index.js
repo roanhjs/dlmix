@@ -6,7 +6,7 @@ import { dlPin } from "./modules/pin/index.js";
 import { m3u8ToMp4 } from "./utils/m3u8ToMp4.js";
 import { dlMangaIn } from "./modules/mangasin/index.js";
 import { webpToJpg } from "./utils/webpToJpg.js";
-import { dlMangaDex } from "./modules/mangadex/index.js";
+import { dlMangadex } from "./modules/mangadex/index.js";
 
 const PORT = process.env.PORT || 3000;
 
