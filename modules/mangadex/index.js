@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 export async function dlMangadex({ url }) {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
   const timeout = 60000;
@@ -17,12 +17,8 @@ export async function dlMangadex({ url }) {
       !processed.has(url)
     ) {
       processed.add(url);
-      try {
-        const id = url.split("/")[5].split("-")[0];
-        images.push({ url, id });
-      } catch (e) {
-        console.error("error leyendo", url, e);
-      }
+      const id = url.split("/")[5].split("-")[0];
+      images.push({ url, id });
     }
   });
 
