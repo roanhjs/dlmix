@@ -1,8 +1,9 @@
 import { chromium } from "playwright-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 
 export async function dlMangaIn({ url }) {
   try {
-    const browser = await chromium.launch({
+    const browser = await chromium.use(StealthPlugin()).launch({
       headless: true,
       slowMo: 100,
     });
