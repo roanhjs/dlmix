@@ -7,10 +7,29 @@ import { m3u8ToMp4 } from "./utils/m3u8ToMp4.js";
 import { dlMangaIn } from "./modules/mangasin/index.js";
 import { webpToJpg } from "./utils/webpToJpg.js";
 import { dlMangadex } from "./modules/mangadex/index.js";
+import rateLimit from "express-rate-limit";
 
 const PORT = process.env.PORT || 3000;
 
 const app = e();
+
+const perSecond = rateLimit({
+  windowMs: 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const perMinute = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// middleware
+app.use(perSecond);
+app.use(perMinute);
 app.use(cors());
 
 app.get("/", (req, res) => {
